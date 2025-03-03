@@ -32,8 +32,6 @@ services:
     image: bluenviron/mediamtx
     restart: unless-stopped
     hostname: ${MEDIAMTX_HOSTNAME}
-    ports:
-      - ${MEDIAMTX_PORT}:${MEDIAMTX_PORT}
     environment:
       - MTX_RTSPADDRESS=${MEDIAMTX_HOSTNAME}:${MEDIAMTX_PORT}
       - MTX_PATHS_WASHBAY1_SOURCE

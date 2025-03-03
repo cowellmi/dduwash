@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS bay_status (
     time TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     bay_id TEXT NOT NULL,
-    status_code INT NOT NULL
+    status_code INT NOT NULL,
+	PRIMARY KEY (time, bay_id)
 );
 
 CREATE EXTENSION IF NOT EXISTS timescaledb;
