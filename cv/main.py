@@ -5,6 +5,7 @@ import numpy as np
 import onnxruntime as rt
 import psycopg2
 from psycopg2.extensions import connection
+from datetime import datetime, timezone, timedelta
 from stream import VideoStream
 
 
@@ -40,10 +41,9 @@ def preprocess_frame(frame: cv2.typing.MatLike, input_size):
 
 def db_connect(dsn):
     try:
-        with psycopg2.connect(dsn) as conn:
-            return conn
+        return psycopg2.connect(dsn)
     except (psycopg2.DatabaseError, Exception) as error:
-        print("error: unable to connect to database")
+        print("unable to connect to db:", error)
         exit(1)
 
 
@@ -62,10 +62,25 @@ def db_get_last_status(conn: connection, bay_id):
         return result[0] if result else None
     
 
+def db_get_last_time(conn: connection, bay_id):
+    query = """
+        SELECT time
+        FROM bay_status 
+        WHERE bay_id = %s
+        ORDER BY time DESC
+        LIMIT 1;
+    """
+
+    with conn.cursor() as cursor:
+        cursor.execute(query, (bay_id,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    
+
 def db_insert_bay_status(conn: connection, bay_id, status):
     query = """
         INSERT INTO bay_status (bay_id, status_code)
-		VALUES (%s, %s);
+        VALUES (%s, %s);
     """
 
     with conn.cursor() as cursor:
@@ -82,7 +97,7 @@ def main():
     dsn =  os.getenv("DATABASE_URL")
     mtx_hostname = os.getenv("MEDIAMTX_HOSTNAME")
     mtx_port = os.getenv("MEDIAMTX_PORT")
-    if dsn == "" or mtx_hostname == "" or mtx_port == "":
+    if not dsn or not mtx_hostname or not mtx_port:
         print("error: missing environment")
         exit(1)
     
@@ -116,13 +131,24 @@ def main():
                     img = preprocess_frame(frame, input_size)
                     outputs = session.run(None, {input_name: img})
                     results = outputs[0][0]
-                    status = np.argmax(results)
-                    last = db_get_last_status(conn, bay_id)
+
+                    # Get the result with the highest score
+                    cur_status = int(np.argmax(results))
+                    last_status = db_get_last_status(conn, bay_id)
 
                     # Update status if there was a change
-                    if last is None or last != status:
-                        print(f"UPDATE: {bay_id}, {status}")
-                        db_insert_bay_status(conn, bay_id, int(status))
+                    if last_status is None or last_status != cur_status:
+                        # If last status was occupied, make sure we wait
+                        # 3 minutes before changing it to empty.
+                        if last_status == 1:
+                            last_time = db_get_last_time(conn, bay_id)
+                            if last_time is not None:
+                                now = datetime.now(timezone.utc)
+                                elapsed_time = now - last_time
+                                if elapsed_time < timedelta(minutes=3):
+                                    break
+
+                        db_insert_bay_status(conn, bay_id, cur_status)
 
                     break
 
