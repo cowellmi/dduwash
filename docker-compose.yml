@@ -1,0 +1,73 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    ports:
+      - ${API_PORT}:${API_PORT}
+    environment:
+      - DATABASE_URL
+      - API_PORT
+      - API_DEV
+      - API_CORS
+      - API_RL_RPS
+      - API_RL_BURST
+    volumes:
+      - ./api:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  cv:
+    build: 
+      context: ./cv
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL
+      - MEDIAMTX_HOSTNAME
+      - MEDIAMTX_PORT
+    depends_on:
+      mediamtx:
+        condition: service_started
+      db:
+        condition: service_healthy
+  
+  db:
+    build: 
+      context: ./db
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    hostname: ${POSTGRES_HOSTNAME}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_HOSTNAME
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'SELECT 1' || exit 1"]
+      interval: 5s
+      timeout: 20s
+      retries: 5
+
+  mediamtx:
+    image: bluenviron/mediamtx
+    restart: unless-stopped
+    hostname: ${MEDIAMTX_HOSTNAME}
+    ports:
+      - ${MEDIAMTX_PORT}:${MEDIAMTX_PORT}
+    environment:
+      - MTX_RTSPADDRESS=${MEDIAMTX_HOSTNAME}:${MEDIAMTX_PORT}
+      - MTX_PATHS_WASHBAY1_SOURCE
+      - MTX_PATHS_WASHBAY2_SOURCE
+      - MTX_PATHS_WASHBAY3_SOURCE
+      - MTX_PATHS_WASHBAY4_SOURCE
+      - MTX_PATHS_WASHBAY5_SOURCE
+      - MTX_PATHS_WASHBAY6_SOURCE
+
+volumes:
+  postgres-data:
