@@ -21,8 +21,8 @@ type Config struct {
 	DatabaseUrl        string   `env:"DATABASE_URL"`
 	Port               int      `env:"API_PORT"`
 	Dev                bool     `env:"API_DEV"`
-	RateLimitRps       int      `env:"API_RL_RPS"`
-	RateLimitMaxBurst  int      `env:"API_RL_BURST"`
+	RateLimitRps       int      `env:"API_LIMITER_RPS"`
+	RateLimitMaxBurst  int      `env:"API_LIMITER_BURST"`
 	CorsTrustedOrigins []string `env:"API_CORS" envSeparator:","`
 }
 

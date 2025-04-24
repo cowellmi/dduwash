@@ -15,6 +15,7 @@ STDDEV_THRESHOLD = 10
 MAX_ATTEMPTS = 10
 BUFFER_DELAY = 5  # seconds
 MAIN_DELAY = 10  # seconds
+STATUS_CACHE = {}  # bay_id -> (status_code, timestamp)
 
 
 def handle_exit_signal(signum, frame):
@@ -48,6 +49,10 @@ def db_connect(dsn):
 
 
 def db_get_last_status(conn: connection, bay_id):
+    # Check cache first
+    if bay_id in STATUS_CACHE:
+        return STATUS_CACHE[bay_id][0]
+
     query = """
         SELECT status_code
         FROM bay_status 
@@ -63,6 +68,10 @@ def db_get_last_status(conn: connection, bay_id):
     
 
 def db_get_last_time(conn: connection, bay_id):
+    # Check cache first
+    if bay_id in STATUS_CACHE:
+        return STATUS_CACHE[bay_id][1]
+
     query = """
         SELECT time
         FROM bay_status 
@@ -80,12 +89,17 @@ def db_get_last_time(conn: connection, bay_id):
 def db_insert_bay_status(conn: connection, bay_id, status):
     query = """
         INSERT INTO bay_status (bay_id, status_code)
-        VALUES (%s, %s);
+        VALUES (%s, %s)
+        RETURNING time;
     """
 
     with conn.cursor() as cursor:
         cursor.execute(query, (bay_id, status))
+        time = cursor.fetchone()[0]
         conn.commit()
+    
+    # Update cache
+    STATUS_CACHE[bay_id] = (status, time)
 
 
 def main():
@@ -156,7 +170,7 @@ def main():
                 time.sleep(BUFFER_DELAY)
             else:
                 print(f"{bay_id}: unable to process stream")
-
+        
         time.sleep(MAIN_DELAY)
 
     # Cleanup
