@@ -3,11 +3,8 @@ bin/
 tmp/
 
 # Secrets
-.env
-.envrc*
-!.envrc.local
-!.envrc.sample
-.direnv
+.env*
+!.env.sample
 
 # Python
 venv/
