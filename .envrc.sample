@@ -1,0 +1,2 @@
+export DDUWASH_SERVER="user@server"
+export DDUWASH_PATH="/path/to/directory"

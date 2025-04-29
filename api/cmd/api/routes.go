@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -11,6 +12,8 @@ import (
 // App router
 func (app *application) routes() http.Handler {
 	r := chi.NewRouter()
+
+	fmt.Println(app.config.CorsTrustedOrigins)
 
 	// Middleware
 	r.Use(middleware.StripSlashes)
