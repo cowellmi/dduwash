@@ -5,7 +5,6 @@ import numpy as np
 import onnxruntime as rt
 import psycopg2
 from psycopg2.extensions import connection
-from datetime import datetime, timezone, timedelta
 from stream import VideoStream
 
 
@@ -152,16 +151,6 @@ def main():
 
                     # Update status if there was a change
                     if last_status is None or last_status != cur_status:
-                        # If last status was occupied, make sure we wait
-                        # 3 minutes before changing it to empty.
-                        if last_status == 1:
-                            last_time = db_get_last_time(conn, bay_id)
-                            if last_time is not None:
-                                now = datetime.now(timezone.utc)
-                                elapsed_time = now - last_time
-                                if elapsed_time < timedelta(minutes=3):
-                                    break
-
                         db_insert_bay_status(conn, bay_id, cur_status)
 
                     break
