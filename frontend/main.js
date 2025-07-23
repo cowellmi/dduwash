@@ -27,7 +27,7 @@ const statuses = [
         }
 
         // Fetch data from API
-        const response = await fetch('https://faiu9tdgka.execute-api.us-west-2.amazonaws.com/');
+        const response = await fetch('/api');
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
