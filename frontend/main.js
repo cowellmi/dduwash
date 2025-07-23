@@ -1,15 +1,15 @@
 const statuses = [
     {
         'text': 'Empty',
-        'img': 'img/green.svg'
+        'img': '/img/green.svg'
     },
     {
         'text': 'Occupied',
-        'img': 'img/red.svg'
+        'img': '/img/red.svg'
     },
     {
         'text': 'Maintenance',
-        'img': 'img/yellow.svg'
+        'img': '/img/yellow.svg'
     }
 ];
 
