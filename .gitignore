@@ -17,3 +17,6 @@ dataset/
 runs/
 test/
 caps/
+
+# OS
+.DS_Store
