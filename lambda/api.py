@@ -1,7 +1,6 @@
 import json
 import boto3
 from boto3.dynamodb.conditions import Key
-from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('dduwash')
@@ -14,8 +13,8 @@ def lambda_handler(event, context):
         for bay_id in bay_ids:
             response = table.query(
                 KeyConditionExpression=Key('bay_id').eq(bay_id),
-                ScanIndexForward=False, # This makes it sort in descending order
-                Limit=1 # We only want the most recent entry
+                ScanIndexForward=False,  # This makes it sort in descending order
+                Limit=1  # We only want the most recent entry
             )
             if response['Items']:
                 results.append(response['Items'][0])
@@ -28,7 +27,7 @@ def lambda_handler(event, context):
                 'Cache-Control': 'public, max-age=60',
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps(results, default=lambda x: int(x) if isinstance(x, Decimal) else x)
+            'body': results
         }
     except Exception as e:
         print(e) # Log error message for debugging
@@ -38,5 +37,7 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Origin': 'https://www.dduwash.com',
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({'error': 'internal server error'})
+            'body': {
+                'error': 'internal server error'
+            }
         }
