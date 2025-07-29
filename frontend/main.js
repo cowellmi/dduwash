@@ -1,20 +1,29 @@
 const statuses = [
     {
         'text': 'Empty',
-        'img': '/img/green.svg'
+        'img': '/img/green.svg',
+        'alt': 'green circle'
     },
     {
         'text': 'Occupied',
-        'img': '/img/red.svg'
+        'img': '/img/red.svg',
+        'alt': 'red circle'
     },
     {
         'text': 'Maintenance',
-        'img': '/img/yellow.svg'
+        'img': '/img/yellow.svg',
+        'alt': 'yellow circle'
     }
 ];
 
 (async () => {
     try {
+        // Cache status images
+        for (const status of statuses) {
+            const img = new Image();
+            img.src = status['img'];
+        }
+
         // Load DOM elements        
         const el = document.getElementById('live-status');
         const loadingIndicator = el.querySelector('p');
@@ -44,6 +53,7 @@ const statuses = [
             const img = clone.querySelector('img');
             const status = statuses[res['status']];
             img.setAttribute('src', status['img']);
+            img.setAttribute('alt', status['alt']);
             const figcaption = clone.querySelector('figcaption');
             figcaption.textContent = status['text'];
             tbody.appendChild(clone);
