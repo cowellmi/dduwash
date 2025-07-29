@@ -12,7 +12,6 @@ STDDEV_THRESHOLD = 10
 MAX_ATTEMPTS = 10
 
 s3 = boto3.client('s3')
-ssm = boto3.client('ssm')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('dduwash') # type: ignore
 
@@ -29,8 +28,7 @@ def handler(event, context):
     input_size = input_shape[2], input_shape[3]
 
     # Read secrets
-    response = ssm.get_parameter(Name='dduwash-cameras', WithDecryption=True)
-    rtsp_urls = json.loads(response['Parameter']['Value'])
+    rtsp_urls = json.loads(os.environ['RTSP_URLS'])
     
     results = {}
     errors = []
