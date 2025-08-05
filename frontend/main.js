@@ -1,19 +1,37 @@
 const statuses = [
     {
-        'text': 'Empty',
         'img': '/img/green.svg',
-        'alt': 'green circle'
+        'alt': {
+            'en': 'green circle',
+            'es': 'círculo verde',
+        },
+        'text': {
+            'en': 'Empty',
+            'es': 'Vacío',
+        },
     },
     {
-        'text': 'Occupied',
         'img': '/img/red.svg',
-        'alt': 'red circle'
+        'alt': {
+            'en': 'red circle',
+            'es': 'círculo rojo',
+        },
+        'text': {
+            'en': 'Occupied',
+            'es': 'Ocupado',
+        },
     },
     {
-        'text': 'Maintenance',
         'img': '/img/yellow.svg',
-        'alt': 'yellow circle'
-    }
+        'alt': {
+            'en': 'yellow circle',
+            'es': 'círculo amarillo',
+        },
+        'text': {
+            'en': 'Maintenance',
+            'es': 'Mantenimiento',
+        },
+    },
 ];
 
 (async () => {
@@ -46,6 +64,7 @@ const statuses = [
         }        
         
         // Add results to table
+        const lang = document.documentElement.lang
         for (const res of results) {
             const clone = rowTemplate.content.cloneNode(true);
             const td = clone.querySelector('td');
@@ -53,9 +72,9 @@ const statuses = [
             const img = clone.querySelector('img');
             const status = statuses[res['status']];
             img.setAttribute('src', status['img']);
-            img.setAttribute('alt', status['alt']);
+            img.setAttribute('alt', status['alt'][lang]);
             const figcaption = clone.querySelector('figcaption');
-            figcaption.textContent = status['text'];
+            figcaption.textContent = status['text'][lang];
             tbody.appendChild(clone);
         }
 
