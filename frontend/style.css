@@ -4,6 +4,20 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Adwaita Sans, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
+    color: light-dark(#1b1b1b, #ffffff);
+    background-color: light-dark(#ffffff, #1b1b1b);
+}
+
+p {
+    line-height: 1.5;
+    margin-bottom: 1.2em;
+}
+
+nav {
+    grid-area: nav;
+}
+
+#grid-container {
     display: grid;
     grid-template-columns: 400px 350px 1fr;
     grid-template-areas:
@@ -12,13 +26,6 @@ body {
         "about about live-status";
     gap: 4rem;
     padding: 4rem;
-    color: light-dark(#1b1b1b, #ffffff);
-    background-color: light-dark(#ffffff, #1b1b1b);
-}
-
-p {
-    line-height: 1.5;
-    margin-bottom: 1.2em;
 }
 
 #sign {
@@ -185,7 +192,7 @@ p {
 }
 
 @media (max-width: 1260px) {
-    body {
+    #grid-container {
         grid-template-columns: 400px 350px;
         grid-template-areas:
             "sign contact"
@@ -195,7 +202,7 @@ p {
 }
 
 @media (max-width: 900px) {
-    body {
+    #grid-container {
         grid-template-columns: 1fr;
         grid-template-areas:
             "sign"
@@ -214,7 +221,7 @@ p {
 }
 
 @media (max-width: 500px) {
-    body {
+    #grid-container {
         padding: 1rem;
     }
 
