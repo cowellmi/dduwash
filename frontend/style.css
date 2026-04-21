@@ -15,6 +15,18 @@ p {
 
 nav {
     grid-area: nav;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 4rem;
+}
+
+#visitor-counter {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b6b6b;
+    white-space: nowrap;
 }
 
 #grid-container {
@@ -202,6 +214,10 @@ nav {
 }
 
 @media (max-width: 900px) {
+    nav {
+        padding: 0 2rem;
+    }
+
     #grid-container {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -221,6 +237,14 @@ nav {
 }
 
 @media (max-width: 500px) {
+    nav {
+        padding: 0 1rem;
+    }
+
+    #visitor-counter {
+        font-size: 0.8rem;
+    }
+
     #grid-container {
         padding: 1rem;
     }

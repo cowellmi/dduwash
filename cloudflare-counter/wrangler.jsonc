@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dduwash-counter",
+  "main": "src/index.js",
+  "compatibility_date": "2026-04-21",
+  "routes": [
+    {
+      "pattern": "dduwash.com/counter",
+      "zone_name": "dduwash.com"
+    },
+    {
+      "pattern": "www.dduwash.com/counter",
+      "zone_name": "dduwash.com"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "VISITOR_COUNTER",
+        "class_name": "VisitorCounter"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "VisitorCounter"
+      ]
+    }
+  ]
+}

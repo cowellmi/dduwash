@@ -98,3 +98,38 @@ const statuses = [
         console.error(err);
     }
 })();
+
+(async () => {
+    try {
+        const counter = document.getElementById('visitor-counter');
+        const value = document.getElementById('visitor-counter-value');
+        if (counter == null || value == null) {
+            return;
+        }
+
+        const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalHost) {
+            return;
+        }
+
+        const response = await fetch('/counter', {
+            headers: {
+                'accept': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Counter response status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (typeof result.value !== 'number') {
+            throw new Error('Counter value missing');
+        }
+
+        value.textContent = result.value.toLocaleString();
+        counter.classList.remove('hidden');
+        counter.style.visibility = 'visible';
+    } catch (err) {
+        console.error(err);
+    }
+})();
