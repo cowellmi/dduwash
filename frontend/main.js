@@ -1,6 +1,10 @@
+import greenStatusIcon from './img/green.svg';
+import redStatusIcon from './img/red.svg';
+import yellowStatusIcon from './img/yellow.svg';
+
 const statuses = [
     {
-        'img': '/img/green.svg',
+        'img': greenStatusIcon,
         'alt': {
             'en': 'green circle',
             'es': 'círculo verde',
@@ -11,7 +15,7 @@ const statuses = [
         },
     },
     {
-        'img': '/img/red.svg',
+        'img': redStatusIcon,
         'alt': {
             'en': 'red circle',
             'es': 'círculo rojo',
@@ -22,7 +26,7 @@ const statuses = [
         },
     },
     {
-        'img': '/img/yellow.svg',
+        'img': yellowStatusIcon,
         'alt': {
             'en': 'yellow circle',
             'es': 'círculo amarillo',

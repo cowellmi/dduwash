@@ -1,5 +1,9 @@
 :root {
     color-scheme: light dark;
+    --counter-label-light: #6a6a6a;
+    --counter-label-dark: #d6d6d6;
+    --segment-bg: #121212;
+    --segment-on: #ff7a3d;
 }
 
 body {
@@ -24,9 +28,33 @@ nav {
 
 #visitor-counter {
     margin: 0;
-    font-size: 0.9rem;
-    color: #6b6b6b;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.45rem 0.3rem 0.55rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: light-dark(var(--counter-label-light), var(--counter-label-dark));
     white-space: nowrap;
+}
+
+#visitor-counter-value {
+    display: inline-block;
+    min-width: 7.6ch;
+    padding: 0.16rem 0.42rem 0.12rem;
+    border-radius: 0.3rem;
+    border: 1px solid #2a2a2a;
+    font-family: "Courier New", "Lucida Console", Monaco, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--segment-on);
+    background: linear-gradient(180deg, #1a1a1a, var(--segment-bg));
+    box-shadow: inset 0 0 0.45rem rgba(0, 0, 0, 0.65), 0 0 0.4rem rgba(255, 122, 61, 0.22);
+    text-shadow: 0 0 0.18rem rgba(255, 130, 74, 0.7), 0 0 0.42rem rgba(255, 130, 74, 0.35);
+    font-variant-numeric: tabular-nums;
 }
 
 #grid-container {
@@ -35,7 +63,8 @@ nav {
     grid-template-areas:
         "sign contact live-status"
         "features vending live-status"
-        "about about live-status";
+        "car-wash car-wash about"
+        "car-wash car-wash about";
     gap: 4rem;
     padding: 4rem;
 }
@@ -173,6 +202,66 @@ nav {
     max-width: 64ch;
 }
 
+#car-wash {
+    grid-area: car-wash;
+}
+
+.video-frame {
+    position: relative;
+    width: min(900px, 100%);
+    aspect-ratio: 16 / 9;
+    border: 0.2rem solid #afafaf;
+    border-radius: 0.8rem;
+    overflow: hidden;
+}
+
+.video-frame video,
+.video-frame iframe {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+#car-wash .image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#car-wash .image-grid figure {
+    flex: 1 1 260px;
+    min-width: 220px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 0.2rem solid #afafaf;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+#car-wash .image-grid figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#car-wash .image-grid figure figcaption {
+    margin: 0;
+    padding: 0.85rem 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #282828;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    border-top: 0.2rem solid #afafaf;
+}
+
+
 .hidden {
     opacity: 0;
     visibility: hidden;
@@ -209,7 +298,8 @@ nav {
         grid-template-areas:
             "sign contact"
             "features live-status"
-            "about vending";
+            "car-wash about"
+            "car-wash about";
     }
 }
 
@@ -226,6 +316,7 @@ nav {
             "live-status"
             "features"
             "vending"
+            "car-wash"
             "about";
         gap: 2rem;
         padding: 2rem;
@@ -242,7 +333,16 @@ nav {
     }
 
     #visitor-counter {
-        font-size: 0.8rem;
+        gap: 0.28rem;
+        padding: 0.25rem 0.35rem 0.25rem 0.45rem;
+        font-size: 0.62rem;
+    }
+
+    #visitor-counter-value {
+        min-width: 7ch;
+        padding: 0.14rem 0.34rem 0.1rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
     }
 
     #grid-container {
