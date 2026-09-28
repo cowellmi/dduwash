@@ -1,0 +1,26 @@
+# Build
+bin/
+tmp/
+dist/
+
+# Secrets
+.env*
+!.env.sample
+!.envrc.sample
+
+# Python
+venv/
+.venv/
+__pycache__/
+
+#JavaScript
+node_modules/
+
+# CV
+dataset/
+runs/
+test/
+caps/
+
+# OS
+.DS_Store
