@@ -19,5 +19,5 @@ npm run dev
 ## Cloudflare counter
 
 ```bash
-npx wrangler deploy --config cloudflare-counter/wrangler.jsonc
+npx wrangler deploy --config counter/wrangler.jsonc
 ```

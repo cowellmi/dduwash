@@ -105,8 +105,8 @@ const statuses = [
 
 (async () => {
     try {
-        const counter = document.getElementById('visitor-counter');
-        const value = document.getElementById('visitor-counter-value');
+        const counter = document.getElementById('counter');
+        const value = document.getElementById('counter-value');
         if (counter == null || value == null) {
             return;
         }
